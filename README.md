@@ -1,2 +1,4 @@
 # 382Project
-P2P 
+Java RMI Tic-Tac-Toe
+
+
