@@ -30,6 +30,8 @@ class threading implements Runnable
 		}
 	}
 	
+	//This is a helper method that checks whether the game is over or not
+	
 	private boolean checkEndOfGame()
 	{
 		//This is for line1 horizontal all matching, if so game will end
@@ -149,15 +151,39 @@ class threading implements Runnable
 			}
 			return true;
 		}
-		
 		//If there isn't a winner decided this will happen
-		
 		else
 		{
 			System.out.println("It's your move Yugi-Boy!");
 			return false;
 		}
 	}
+	
+	//This is a helper method to change the board and input the players character into the proper position
+	
+	private void changeBoard(String placementOnBoard)
+	{
+		if(placementOnBoard.equals("1"))
+			this.board[0][0] = this.character;
+		else if(placementOnBoard.equals("2"))
+			this.board[0][1] = this.character;
+		else if(placementOnBoard.equals("3"))
+			this.board[0][2] = this.character;
+		else if(placementOnBoard.equals("4"))
+			this.board[1][0] = this.character;
+		else if(placementOnBoard.equals("5"))
+			this.board[1][1] = this.character;
+		else if(placementOnBoard.equals("6"))
+			this.board[1][2] = this.character;
+		else if(placementOnBoard.equals("7"))
+			this.board[2][0] = this.character;
+		else if(placementOnBoard.equals("8"))
+			this.board[2][1] = this.character;
+		else 
+			this.board[2][2] = this.character;
+	}
+	
+	
 	
 	public void run()
 	{
@@ -167,7 +193,32 @@ class threading implements Runnable
 		 */
 		if(Thread.currentThread().getId() == 0)
 		{
-			Scanner scanner = new Scanner(System.in);
+			while(gameOn)
+			{
+				Scanner scanner = new Scanner(System.in);
+				String userInput = scanner.nextLine();
+				if(userInput.equals("1") || userInput.equals("2") || userInput.equals("3") || userInput.equals("4") || userInput.equals("5") || userInput.equals("6") || userInput.equals("7") || userInput.equals("8") || userInput.equals("9"))
+				{
+					if(this.playersTurn)
+					{
+						this.changeBoard(userInput);
+						this.stub.addToBoard(this.board, this.serverName);
+						this.playersTurn = false;
+						if(this.checkEndOfGame())
+							gameOn = false;
+						
+						this.stub.passTurn(this.serverName);
+					}
+					else
+					{
+						System.out.println("IT IS NOT YOUR TURN!!!! YOU NEED TO BELIEVE IN THE HEART OF THE CARDS!!!!!");
+					}
+				}
+				else
+				{
+					this.stub.makeComment(userInput, this.serverName);
+				}
+			}
 		}
 		
 		/*
