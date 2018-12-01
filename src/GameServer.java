@@ -16,6 +16,17 @@ public class GameServer implements GameInterface{
 		
 	}
 	
+	public String [] [] updateBoard(String serverName)
+	{
+		return null;
+		
+	}
+	
+	public boolean checkTurn(String serverName)
+	{
+		return false;
+	}
+	
 	public String attachToServer() throws IOException
 	{
 		File file = new File("ClientStartup");
