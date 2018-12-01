@@ -11,7 +11,17 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class GameServer implements GameInterface{
 	
-	public void makeComment(String str)
+	public void makeComment(String comment, String serverName)
+	{
+		
+	}
+	
+	public void passTurn(String serverName)
+	{
+		
+	}
+	
+	public void addToBoard(String [] [] str, String serverName)
 	{
 		
 	}
@@ -78,5 +88,4 @@ public class GameServer implements GameInterface{
 			e.printStackTrace();
 		}
 	}
-
 }
