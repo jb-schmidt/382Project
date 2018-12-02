@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.rmi.AccessException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -202,12 +203,12 @@ class threading implements Runnable
 					if(this.playersTurn)
 					{
 						this.changeBoard(userInput);
-						this.stub.addToBoard(this.board, this.serverName);
+						this.stub.addToBoard(this.board, this.serverName, this.host, true);
 						this.playersTurn = false;
 						if(this.checkEndOfGame())
 							gameOn = false;
 						
-						this.stub.passTurn(this.serverName);
+						this.stub.passTurn(this.serverName, this.host, true);
 					}
 					else
 					{
@@ -216,7 +217,17 @@ class threading implements Runnable
 				}
 				else
 				{
-					this.stub.makeComment(userInput, this.serverName);
+					try {
+						try {
+							this.stub.makeComment(userInput, this.serverName, this.host, true);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					} catch (NotBoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 		}
@@ -259,16 +270,16 @@ class threading implements Runnable
 				{
 					if(this.serverName.equals("Game"))
 					{
-						this.playersTurn = stub2.checkTurn("Game2");
+						this.playersTurn = stub2.checkTurn("Game2", this.host, true);
 					}
 					else
 					{
-						this.playersTurn = stub2.checkTurn("Game");
+						this.playersTurn = stub2.checkTurn("Game", this.host, true);
 						
 					}
 					if(this.playersTurn)
 					{
-						this.board = stub2.updateBoard(this.serverName);
+						this.board = stub2.updateBoard(this.serverName, this.host, true);
 						for(int i = 0; i < 3; i++)
 						{
 							System.out.println(this.board [i][0] + " | "  + this.board[i][1] + " | "  + this.board[i][2]);
