@@ -6,6 +6,20 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Scanner;
 
+/*
+*  Threading is a class that implements Runnable which gives funcntions for threads to call and allows threading to be used
+*  to allow multiple actions to happen simultaneously.
+*  It has 6 class variables which are host, stub, serverName, playersTurn, board, and character.
+*  @var host - holds the string necessary to initiate a GameInterface stub so that the server can be contacted
+*  @var stub - is the GameInterface object that allows us to use the methods of the server that we are connecting through using
+*  java rmi.
+*  @var serverName - is a string that holds the name of the server that the client is in contact with using java rmi
+*  @var playerTurn - is a boolean that tracks whether or not it is the clients turn to access the board, if it is true then 
+*  it is this client's turn, if it is false then it isn't this client's turn
+*  @var board = is an array of array of string that tracks what is on the board
+*  @var character - holds the character that represents the client on the board, the choices are either X or O
+*/
+
 class threading implements Runnable
 {
 	String host;
@@ -14,6 +28,17 @@ class threading implements Runnable
 	boolean playersTurn;
 	String [][] board = new String [3][3];
 	String character;
+	
+	/*
+	*  The constructor for the threads
+	*  @param host - holds the string for the host portion that is necessary for connecting to servers, it is mainly
+	*  used in method calls to the server becasue this client's server must contact the other client's server and the 
+	*  client's server does it by creating a stub to connect to the other server it the methods that the client calls
+	*  @param stub - contains the stub that was initially created when the client starts up and will be used to contact the 
+	*  server by one of the threads
+	*  @param serverName - is the serverName of the server that this client will connect to
+	*  @param turn - is for the initial start of the turn and dictates who will go first, if true then this client goes first
+	*/
 	
 	public threading(String host, GameInterface stub, String serverName, boolean turn)
 	{
@@ -30,9 +55,10 @@ class threading implements Runnable
 			this.character = "O";
 		}
 	}
-	
-	//This is a helper method that checks whether the game is over or not
-	
+	/*
+	*  This is a helper method that checks whether the game is over or not, there are 8 possible sequences that lead to 
+	*  the game ending 
+	*/
 	private boolean checkEndOfGame()
 	{
 		//This is for line1 horizontal all matching, if so game will end
@@ -152,6 +178,13 @@ class threading implements Runnable
 			}
 			return true;
 		}
+		//If the game is a draw and board is all full so no one can take a turn
+		else if(this.board[0][0].equals("1") == false && this.board[0][1].equals("2") == false && this.board[0][2].equals("3") == false && this.board[1][0].equals("4") == false && this.board[1][1].equals("5") == false
+				&& this.board[1][2].equals("6") == false && this.board[2][0].equals("7") == false && this.board[2][1].equals("8") == false && this.board[2][2].equals("9") == false)
+		{
+			System.out.println("Game is a draw there is no winner!");
+			return true;
+		}
 		//If there isn't a winner decided this will happen
 		else
 		{
@@ -161,30 +194,126 @@ class threading implements Runnable
 	}
 	
 	//This is a helper method to change the board and input the players character into the proper position
-	
 	private void changeBoard(String placementOnBoard)
 	{
+		Scanner in = new Scanner(System.in);
+		String input;
 		if(placementOnBoard.equals("1"))
-			this.board[0][0] = this.character;
+		{
+			if(this.board[0][0].equals("1"))
+				this.board[0][0] = this.character;
+			else
+			{
+				System.out.println("POSITION IS FILLED!!!! PLEASE CHOOSE ANOTHER POSITION!!!");
+				input = in.nextLine();
+				this.changeBoard(input);
+			}
+				
+		}
+		
 		else if(placementOnBoard.equals("2"))
-			this.board[0][1] = this.character;
+		{
+			if(this.board[0][1].equals("2"))
+				this.board[0][1] = this.character;
+			else
+			{
+				System.out.println("POSITION IS FILLED!!!! PLEASE CHOOSE ANOTHER POSITION!!!");
+				input = in.nextLine();
+				this.changeBoard(input);
+			}
+		}
+		
 		else if(placementOnBoard.equals("3"))
-			this.board[0][2] = this.character;
+		{
+			if(this.board[0][2].equals("3"))
+				this.board[0][2] = this.character;
+			else
+			{
+				System.out.println("POSITION IS FILLED!!!! PLEASE CHOOSE ANOTHER POSITION!!!");
+				input = in.nextLine();
+				this.changeBoard(input);
+			}
+		}
+		
 		else if(placementOnBoard.equals("4"))
-			this.board[1][0] = this.character;
+		{
+			if(this.board[1][0].equals("4"))
+				this.board[1][0] = this.character;
+			else
+			{
+				System.out.println("POSITION IS FILLED!!!! PLEASE CHOOSE ANOTHER POSITION!!!");
+				input = in.nextLine();
+				this.changeBoard(input);
+			}
+		}
+		
 		else if(placementOnBoard.equals("5"))
-			this.board[1][1] = this.character;
+		{
+			if(this.board[1][1].equals("5"))
+				this.board[1][1] = this.character;
+			else
+			{
+				System.out.println("POSITION IS FILLED!!!! PLEASE CHOOSE ANOTHER POSITION!!!");
+				input = in.nextLine();
+				this.changeBoard(input);
+			}
+		}
+		
 		else if(placementOnBoard.equals("6"))
-			this.board[1][2] = this.character;
+		{
+			if(this.board[1][2].equals("6"))
+				this.board[1][2] = this.character;
+			else
+			{
+				System.out.println("POSITION IS FILLED!!!! PLEASE CHOOSE ANOTHER POSITION!!!");
+				input = in.nextLine();
+				this.changeBoard(input);
+			}
+		}
+		
 		else if(placementOnBoard.equals("7"))
-			this.board[2][0] = this.character;
+		{
+			if(this.board[2][0].equals("7"))
+				this.board[2][0] = this.character;
+			else
+			{
+				System.out.println("POSITION IS FILLED!!!! PLEASE CHOOSE ANOTHER POSITION!!!");
+				input = in.nextLine();
+				this.changeBoard(input);
+			}
+		}
+		
+		
 		else if(placementOnBoard.equals("8"))
-			this.board[2][1] = this.character;
-		else 
-			this.board[2][2] = this.character;
+		{
+			if(this.board[2][1].equals("8"))
+				this.board[2][1] = this.character;
+			else
+			{
+				System.out.println("POSITION IS FILLED!!!! PLEASE CHOOSE ANOTHER POSITION!!!");
+				input = in.nextLine();
+				this.changeBoard(input);
+			}
+		}
+		
+		else if(placementOnBoard.equals("9"))
+		{
+			if(this.board[2][2].equals("9"))
+				this.board[2][2] = this.character;
+			else
+			{
+				System.out.println("POSITION IS FILLED!!!! PLEASE CHOOSE ANOTHER POSITION!!!");
+				input = in.nextLine();
+				this.changeBoard(input);
+			}
+		}
+		else
+		{
+			System.out.println("PLEASE INPUT AN ACTUAL POSITION ON THE BOARD!!!!!!!!");
+			input = in.nextLine();
+			this.changeBoard(input);
+		}
 	}
-	
-	
 	
 	public void run()
 	{
