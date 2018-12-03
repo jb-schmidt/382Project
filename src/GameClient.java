@@ -28,6 +28,7 @@ class threading implements Runnable
 	boolean playersTurn;
 	String [][] board = new String [3][3];
 	String character;
+	int threadID;
 	
 	/*
 	*  The constructor for the threads
@@ -40,12 +41,13 @@ class threading implements Runnable
 	*  @param turn - is for the initial start of the turn and dictates who will go first, if true then this client goes first
 	*/
 	
-	public threading(String host, GameInterface stub, String serverName, boolean turn)
+	public threading(String host, GameInterface stub, String serverName, boolean turn, int id)
 	{
 		this.host = host;
 		this.stub = stub;
 		this.serverName = serverName;
 		this.playersTurn = turn;
+		this.threadID = id;
 		if(serverName.equals("Game"))
 		{
 			this.character = "X";
@@ -193,11 +195,25 @@ class threading implements Runnable
 		}
 	}
 	
-	//This is a helper method to change the board and input the players character into the proper position
+	/*
+	*  This is a helper method to change the board and input the players character into the proper position
+	*  if the user input an invalid position or the user input a position that has already been claimed
+	*  then the system will inform them of the mistake and will ask the user to put in another position
+	*  the function then will recursively call itself and attempt to put the character into the position the user
+	*  identified again informing them if the position is filled or non existant.
+	* 
+	*  @param placementOnBoard = a String that is supposed to be a number 1 through 9 to indicate which position
+	*  on the board the player would like to put their character and the user cannot input spaces with it, it just needs to
+	*  be the single integer
+	*/
+	
 	private void changeBoard(String placementOnBoard)
 	{
 		Scanner in = new Scanner(System.in);
 		String input;
+		/*
+		*  This is what to do if the user inputs the number 1
+		*/
 		if(placementOnBoard.equals("1"))
 		{
 			if(this.board[0][0].equals("1"))
@@ -210,7 +226,9 @@ class threading implements Runnable
 			}
 				
 		}
-		
+		/*
+		*  This is what to do if the user inputs the number 2
+		*/
 		else if(placementOnBoard.equals("2"))
 		{
 			if(this.board[0][1].equals("2"))
@@ -222,7 +240,9 @@ class threading implements Runnable
 				this.changeBoard(input);
 			}
 		}
-		
+		/*
+		*  This is what to do if the user inputs the number 3
+		*/
 		else if(placementOnBoard.equals("3"))
 		{
 			if(this.board[0][2].equals("3"))
@@ -234,7 +254,9 @@ class threading implements Runnable
 				this.changeBoard(input);
 			}
 		}
-		
+		/*
+		*  This is what to do if the user inputs the number 4
+		*/
 		else if(placementOnBoard.equals("4"))
 		{
 			if(this.board[1][0].equals("4"))
@@ -246,7 +268,9 @@ class threading implements Runnable
 				this.changeBoard(input);
 			}
 		}
-		
+		/*
+		*  This is what to do if the user inputs the number 5
+		*/
 		else if(placementOnBoard.equals("5"))
 		{
 			if(this.board[1][1].equals("5"))
@@ -258,7 +282,9 @@ class threading implements Runnable
 				this.changeBoard(input);
 			}
 		}
-		
+		/*
+		*  This is what to do if the user inputs the number 6
+		*/
 		else if(placementOnBoard.equals("6"))
 		{
 			if(this.board[1][2].equals("6"))
@@ -270,7 +296,9 @@ class threading implements Runnable
 				this.changeBoard(input);
 			}
 		}
-		
+		/*
+		*  This is what to do if the user inputs the number 7
+		*/
 		else if(placementOnBoard.equals("7"))
 		{
 			if(this.board[2][0].equals("7"))
@@ -282,8 +310,9 @@ class threading implements Runnable
 				this.changeBoard(input);
 			}
 		}
-		
-		
+		/*
+		*  This is what to do if the user inputs the number 8
+		*/
 		else if(placementOnBoard.equals("8"))
 		{
 			if(this.board[2][1].equals("8"))
@@ -295,7 +324,9 @@ class threading implements Runnable
 				this.changeBoard(input);
 			}
 		}
-		
+		/*
+		*  This is what to do if the user inputs the number 9
+		*/
 		else if(placementOnBoard.equals("9"))
 		{
 			if(this.board[2][2].equals("9"))
@@ -307,6 +338,9 @@ class threading implements Runnable
 				this.changeBoard(input);
 			}
 		}
+		/*
+		*  This is what to do if the user decides to input a value that isn't 1-9
+		*/
 		else
 		{
 			System.out.println("PLEASE INPUT AN ACTUAL POSITION ON THE BOARD!!!!!!!!");
@@ -314,14 +348,18 @@ class threading implements Runnable
 			this.changeBoard(input);
 		}
 	}
-	
+	/*
+	*  This is the overwritten method for extending runnable.  This method is the method that is called by threads and
+	*  is the only method that is directly called by the threads.  
+	*/
 	public void run()
 	{
 		boolean gameOn = true;
 		/*
-		 * This if statement is the thread that will take care of the chat and inputing the players choice for the spot.
+		 *  This if statement is the thread that will take care of the chat and inputing the players choice for the spot
+		 *  on the board.
 		 */
-		if(Thread.currentThread().getId() == 0)
+		if(this.threadID == 0)
 		{
 			while(gameOn)
 			{
@@ -391,6 +429,8 @@ class threading implements Runnable
 			}
 			while(gameOn == true)
 			{
+				//This is so the thread doesn't just immediately start checking the other server for turns,
+				//it'll wait a little between each successive check to see if it's this players turn or not.
 				for(int i = 0; i < 500; i++)
 				{
 					
@@ -464,7 +504,7 @@ public class GameClient {
 					playersTurn = true;
 				}
 				//Runnable object = new threading(host, stub, serverName);
-				Thread t = new Thread(new threading(host, stub, serverName, playersTurn));
+				Thread t = new Thread(new threading(host, stub, serverName, playersTurn, i));
 				t.start();
 			}
 		}
