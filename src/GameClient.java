@@ -450,8 +450,8 @@ class threading implements Runnable
 			while(gameOn == true)
 			{
 				try {
-					String str = stub2.readChat;
-					if(str != null)
+					String str = stub2.readChat();
+					if(str.equals(null) == false)
 					System.out.println(str);
 				} catch (RemoteException e1) {
 					// TODO Auto-generated catch block
