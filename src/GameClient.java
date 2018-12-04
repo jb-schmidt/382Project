@@ -199,7 +199,7 @@ class threading implements Runnable
 		//If there isn't a winner decided this will happen
 		else
 		{
-			System.out.println("It's your move Yugi-Boy!");
+			//System.out.println("It's your move Yugi-Boy!");
 			return false;
 		}
 	}
