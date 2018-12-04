@@ -1,3 +1,4 @@
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.rmi.AccessException;
 import java.rmi.NotBoundException;
@@ -460,7 +461,7 @@ class threading implements Runnable
 					{
 						try {
 							this.playersTurn = stub2.checkTurn("Game2", this.host, true);
-						} catch (RemoteException e) {
+						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
@@ -472,6 +473,12 @@ class threading implements Runnable
 						} catch (RemoteException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
+						} catch (FileNotFoundException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
 						}
 						
 						
@@ -481,6 +488,12 @@ class threading implements Runnable
 						try {
 							this.board = stub2.updateBoard(this.serverName, this.host, true);
 						} catch (RemoteException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (FileNotFoundException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
