@@ -140,7 +140,7 @@ public class GameServer implements GameInterface{
 	 * @see GameInterface#updateBoard(java.lang.String, java.lang.String, boolean)
 	 */
 	
-	public String [] [] updateBoard(String serverName, String host, boolean differentiatesServers)throws RemoteException
+	public String [] [] updateBoard(String serverName, String host, boolean differentiatesServers)throws IOException
 	{
 		File file = new File("Board");
 		BufferedReader br = new BufferedReader(new FileReader(file));
@@ -164,13 +164,13 @@ public class GameServer implements GameInterface{
 	 * Server and Client's file not its own
 	 */
 	
-	public boolean checkTurn(String serverName, String host, boolean differentiatesServers)throws RemoteException
+	public boolean checkTurn(String serverName, String host, boolean differentiatesServers)throws IOException
 	{
 		File file = new File("TurnTracker");
 		BufferedReader br = new BufferedReader(new FileReader(file));
 		String turn = br.readLine();
 		br.close();
-		if(br.equals("True")
+		if(br.equals("True"))
 		   return true;
 		else
 			return false;
