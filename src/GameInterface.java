@@ -12,4 +12,5 @@ public interface GameInterface extends Remote{
 	public void addToBoard(String [] [] str, String serverName, String host, boolean differentiatesServers) throws RemoteException;
 	public void passTurn(String serverName, String host, boolean differentiatesServers) throws RemoteException;
 	public GameInterface connectToOtherServer(String serverName, String host) throws RemoteException, NotBoundException;
+	public String readChat()throws RemoteException, FileNotFoundException, IOException;
 }
