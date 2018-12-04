@@ -1,4 +1,7 @@
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.rmi.AccessException;
 import java.rmi.NotBoundException;
@@ -548,14 +551,11 @@ public class GameClient {
 			}
 			
 			Registry registry = LocateRegistry.getRegistry(host, 12250);
-			String serverName = "Game";
-			GameInterface stub = (GameInterface) registry.lookup("Game");
-			if(stub.attachToServer().equals("Game") == false)
-			{
-				serverName = "Game2";
-				stub = (GameInterface) registry.lookup("Game2");
-			}
-
+			File file = new File("ClientStartup");
+			BufferedReader br = new BufferedReader(new FileReader(file));
+			String serverName = br.readLine();
+			br.close();
+			GameInterface stub = (GameInterface) registry.lookup(serverName);
 			for(int i = 0; i < 3; i++)
 			{
 				System.out.println(matrix [i][0] + " | "  + matrix[i][1] + " | "  + matrix[i][2]);
