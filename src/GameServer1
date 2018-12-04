@@ -47,34 +47,87 @@ public class GameServer1 implements GameInterface{
 	@Override
 	public boolean checkTurn(String serverName, String host, boolean differentiatesServers)
 			throws RemoteException, FileNotFoundException, IOException {
-		// TODO Auto-generated method stub
-		return false;
+		File file = new File("TurnTracker");
+		BufferedReader br = new BufferedReader(new FileReader(file));
+		String turn = br.readLine();
+		br.close();
+		if(br.equals("True"))
+		   return true;
+		else
+			return false;
 	}
 
 	@Override
 	public String[][] updateBoard(String serverName, String host, boolean differentiatesServers)
 			throws RemoteException, FileNotFoundException, IOException {
-		// TODO Auto-generated method stub
-		return null;
+		File file = new File("Board");
+		BufferedReader br = new BufferedReader(new FileReader(file));
+		String boardState = br.readLine();
+		br.close();
+		String [] [] str = new String [3] [3];
+		str[0][0] = String.valueOf(boardState.charAt(0));
+		str[0][1] = String.valueOf(boardState.charAt(1));
+		str[0][2] = String.valueOf(boardState.charAt(2));
+		str[1][0] = String.valueOf(boardState.charAt(3));
+		str[1][1] = String.valueOf(boardState.charAt(4));
+		str[1][2] = String.valueOf(boardState.charAt(5));
+		str[2][0] = String.valueOf(boardState.charAt(6));
+		str[2][1] = String.valueOf(boardState.charAt(7));
+		str[2][2] = String.valueOf(boardState.charAt(8));
+		return str;
 	}
 
 	@Override
 	public void addToBoard(String[][] str, String serverName, String host, boolean differentiatesServers)
-			throws RemoteException {
-		// TODO Auto-generated method stub
+			throws RemoteException, NotBoundException {
+		String string = "";
+		if(serverName.equals("Game"))
+			string = "Game2";
+		else
+			string = "Game";
+		GameInterface stub = this.connectToOtherServer(string, host);
+		String comment = str[0][0] + str[0][1] + str[0][2] + str[1][0] + str[1][2] + str[2][0] + str[2][1] + str[2][2];
+		stub.writeToFile("Board", comment);
 		
 	}
 
 	@Override
-	public void passTurn(String serverName, String host, boolean differentiatesServers) throws RemoteException {
-		// TODO Auto-generated method stub
+	public void passTurn(String serverName, String host, boolean differentiatesServers) throws RemoteException, NotBoundException {
+		String string = "";
+		PrintWriter pw = null; 
+		BufferedWriter bw = null;
+		FileWriter fw = null;
+
+		try {
+			fw = new FileWriter("TurnTracker");
+			bw = new BufferedWriter(fw);
+			bw.write("False");
+			bw.close();
+			fw.close();
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+
+		}
+		
+		String string1 = "";
+		if(serverName.equals("Game"))
+			string1 = "Game2";
+		else
+			string1 = "Game";
+		GameInterface stub = this.connectToOtherServer(string, host);
+		stub.writeToFile("TurnTracker", "True");
 		
 	}
 
 	@Override
 	public String readChat() throws RemoteException, FileNotFoundException, IOException {
-		// TODO Auto-generated method stub
-		return null;
+		File file = new File("Chat");
+		BufferedReader br = new BufferedReader(new FileReader(file));
+		String str = br.readLine();
+		br.close();
+		return str;
 	}
 
 	public void writeToFile(String filename, String whatToWrite) throws RemoteException
@@ -95,5 +148,33 @@ public class GameServer1 implements GameInterface{
 
 		}
 		
+	}
+	
+	public static void main(String args[])
+	{
+		try{
+			//System.setSecurityManager(new RMISecurityManager());
+			//set the security manager
+
+			GameServer1 obj = new GameServer1();
+			GameInterface stub = (GameInterface) UnicastRemoteObject.exportObject(obj, 0);
+			//String givenIP = args[0];
+			
+			//Bind the remote object's stub in the registry
+			Registry registry = LocateRegistry.getRegistry(12250);
+			//Registry registry = LocateRegistry.getRegistry(Integer.parseInt(givenIP));
+			File file = new File("ServerStartup");
+			BufferedReader br = new BufferedReader(new FileReader(file));
+			String serverName = br.readLine();
+			br.close();
+			System.out.println(serverName);
+			registry.bind(serverName, stub);
+			System.err.println("Server ready");
+		}
+
+		catch (Exception e) {
+			System.err.println("Server exception: " + e.toString());
+			e.printStackTrace();
+		}
 	}
 }
