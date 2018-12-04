@@ -449,8 +449,26 @@ class threading implements Runnable
 			}
 			while(gameOn == true)
 			{
+				
+				
+				
+				try {
+					System.out.println(stub2.readChat());
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
 				//This is so the thread doesn't just immediately start checking the other server for turns,
 				//it'll wait a little between each successive check to see if it's this players turn or not.
+				
+				
 				for(int i = 0; i < 500; i++)
 				{
 					
