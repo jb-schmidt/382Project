@@ -370,12 +370,22 @@ class threading implements Runnable
 					if(this.playersTurn)
 					{
 						this.changeBoard(userInput);
-						this.stub.addToBoard(this.board, this.serverName, this.host, true);
+						try {
+							this.stub.addToBoard(this.board, this.serverName, this.host, true);
+						} catch (RemoteException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						this.playersTurn = false;
 						if(this.checkEndOfGame())
 							gameOn = false;
 						
-						this.stub.passTurn(this.serverName, this.host, true);
+						try {
+							this.stub.passTurn(this.serverName, this.host, true);
+						} catch (RemoteException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 					else
 					{
@@ -448,7 +458,12 @@ class threading implements Runnable
 					}
 					if(this.playersTurn)
 					{
-						this.board = stub2.updateBoard(this.serverName, this.host, true);
+						try {
+							this.board = stub2.updateBoard(this.serverName, this.host, true);
+						} catch (RemoteException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						for(int i = 0; i < 3; i++)
 						{
 							System.out.println(this.board [i][0] + " | "  + this.board[i][1] + " | "  + this.board[i][2]);
