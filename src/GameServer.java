@@ -51,21 +51,19 @@ public class GameServer implements GameInterface{
 	
 	public void passTurn(String serverName, String host, boolean differentiatesServers) throws RemoteException
 	{
-		
-		PrintWriter pw = null; 
-		try {
-			pw = new PrintWriter("TurnTracker");
-			pw.print("");
-			pw.print("True");
-			pw.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		if(differentiatesServers == true)
 		{
 			String string = "";
+			PrintWriter pw = null; 
+			try {
+				pw = new PrintWriter("TurnTracker");
+				pw.print("");
+				pw.print("False");
+				pw.close();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if(serverName.equals("Game"))
 				string = "Game2";
 			else
@@ -78,6 +76,19 @@ public class GameServer implements GameInterface{
 			} catch (RemoteException | NotBoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}
+		}
+		else
+		{
+			PrintWriter pw = null; 
+			try {
+				pw = new PrintWriter("TurnTracker");
+				pw.print("");
+				pw.print("True");
+				pw.close();
+			} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 			}
 		}
 	}
@@ -113,7 +124,7 @@ public class GameServer implements GameInterface{
 			try {
 				pw = new PrintWriter("Board");
 				pw.print("");
-				pw.print(str[0][0] + " " + str[0][1] + " " + str[0][2] + " " + str[1][0] + " " + str[1][1] + " " + str[1][2] + " " + str[2][0] + " " + str[2][1] + " " + str[2][2]);
+				pw.print(str[0][0] + str[0][1] + str[0][2] + str[1][0] + str[1][1] + str[1][2] + str[2][0] + str[2][1] + str[2][2]);
 				pw.close();
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
@@ -131,8 +142,21 @@ public class GameServer implements GameInterface{
 	
 	public String [] [] updateBoard(String serverName, String host, boolean differentiatesServers)throws RemoteException
 	{
-		return null;
-		
+		File file = new File("Board");
+		BufferedReader br = new BufferedReader(new FileReader(file));
+		String boardState = br.readLine();
+		br.close();
+		String [] [] str = new String [3] [3];
+		str[0][0] = String.valueOf(boardState.charAt(0));
+		str[0][1] = String.valueOf(boardState.charAt(1));
+		str[0][2] = String.valueOf(boardState.charAt(2));
+		str[1][0] = String.valueOf(boardState.charAt(3));
+		str[1][1] = String.valueOf(boardState.charAt(4));
+		str[1][2] = String.valueOf(boardState.charAt(5));
+		str[2][0] = String.valueOf(boardState.charAt(6));
+		str[2][1] = String.valueOf(boardState.charAt(7));
+		str[2][2] = String.valueOf(boardState.charAt(8));
+		return str;
 	}
 	
 	/*
@@ -142,7 +166,14 @@ public class GameServer implements GameInterface{
 	
 	public boolean checkTurn(String serverName, String host, boolean differentiatesServers)throws RemoteException
 	{
-		return false;
+		File file = new File("TurnTracker");
+		BufferedReader br = new BufferedReader(new FileReader(file));
+		String turn = br.readLine();
+		br.close();
+		if(br.equals("True")
+		   return true;
+		else
+			return false;
 	}
 	
 	public String attachToServer() throws IOException, RemoteException
