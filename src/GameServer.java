@@ -22,7 +22,7 @@ public class GameServer implements GameInterface{
 		return stub;
 	}
 	
-	public void makeComment(String comment, String serverName, String host, boolean differentiatesServers) throws NotBoundException, IOException
+	public void makeComment(String comment, String serverName, String host, boolean differentiatesServers) throws NotBoundException, IOException, RemoteException
 	{
 		if(differentiatesServers == true)
 		{
@@ -49,7 +49,7 @@ public class GameServer implements GameInterface{
 	 * @see GameInterface#passTurn(java.lang.String, java.lang.String, boolean)
 	 */
 	
-	public void passTurn(String serverName, String host, boolean differentiatesServers)
+	public void passTurn(String serverName, String host, boolean differentiatesServers) throws RemoteException
 	{
 		
 		PrintWriter pw = null; 
@@ -89,7 +89,7 @@ public class GameServer implements GameInterface{
 	 * @see GameInterface#addToBoard(java.lang.String[][], java.lang.String, java.lang.String, boolean)
 	 */
 	
-	public void addToBoard(String [] [] str, String serverName, String host, boolean differentiatesServers)
+	public void addToBoard(String [] [] str, String serverName, String host, boolean differentiatesServers) throws RemoteException
 	{
 		if(differentiatesServers == true)
 		{
@@ -129,7 +129,7 @@ public class GameServer implements GameInterface{
 	 * @see GameInterface#updateBoard(java.lang.String, java.lang.String, boolean)
 	 */
 	
-	public String [] [] updateBoard(String serverName, String host, boolean differentiatesServers)
+	public String [] [] updateBoard(String serverName, String host, boolean differentiatesServers)throws RemoteException
 	{
 		return null;
 		
@@ -145,7 +145,7 @@ public class GameServer implements GameInterface{
 		return false;
 	}
 	
-	public String attachToServer() throws IOException
+	public String attachToServer() throws IOException, RemoteException
 	{
 		File file = new File("ClientStartup");
 		BufferedReader br = new BufferedReader(new FileReader(file));
