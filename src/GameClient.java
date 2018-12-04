@@ -449,11 +449,22 @@ class threading implements Runnable
 				{
 					if(this.serverName.equals("Game"))
 					{
-						this.playersTurn = stub2.checkTurn("Game2", this.host, true);
+						try {
+							this.playersTurn = stub2.checkTurn("Game2", this.host, true);
+						} catch (RemoteException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 					else
 					{
-						this.playersTurn = stub2.checkTurn("Game", this.host, true);
+						try {
+							this.playersTurn = stub2.checkTurn("Game", this.host, true);
+						} catch (RemoteException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
 						
 					}
 					if(this.playersTurn)
