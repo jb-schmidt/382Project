@@ -449,11 +449,10 @@ class threading implements Runnable
 			}
 			while(gameOn == true)
 			{
-				
-				
-				
 				try {
-					System.out.println(stub2.readChat());
+					String str = stub2.readChat;
+					if(str != null)
+					System.out.println(str);
 				} catch (RemoteException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
