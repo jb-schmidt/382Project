@@ -140,7 +140,7 @@ public class GameServer implements GameInterface{
 	 * Server and Client's file not its own
 	 */
 	
-	public boolean checkTurn(String serverName, String host, boolean differentiatesServers)
+	public boolean checkTurn(String serverName, String host, boolean differentiatesServers)throws RemoteException
 	{
 		return false;
 	}
