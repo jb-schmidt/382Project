@@ -12,6 +12,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Scanner;
 
 public class GameServer implements GameInterface{
 	
@@ -36,9 +37,22 @@ public class GameServer implements GameInterface{
 		}
 		else
 		{
-			BufferedWriter out = new BufferedWriter(new FileWriter("Chat", true));
-			out.write(comment);
-			out.close();
+			//BufferedWriter out = new BufferedWriter(new FileWriter("Chat", true));
+			//out.write(comment);
+			//out.close();
+			PrintWriter pw = null;
+			BufferedWriter bw = null;
+			FileWriter fw = null;
+			
+			try{
+				fw = new FileWriter("Chat");
+				bw = new BufferedWriter(fw);
+				bw.write(comment);
+				bw.close();
+				fw.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -52,17 +66,23 @@ public class GameServer implements GameInterface{
 	public void passTurn(String serverName, String host, boolean differentiatesServers) throws RemoteException
 	{
 		if(differentiatesServers == true)
-		{
+		{//Turn tracker false
 			String string = "";
 			PrintWriter pw = null; 
+			BufferedWriter bw = null;
+			FileWriter fw = null;
+
 			try {
-				pw = new PrintWriter("TurnTracker");
-				pw.print("");
-				pw.print("False");
-				pw.close();
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
+				fw = new FileWriter("TurnTracker");
+				bw = new BufferedWriter(fw);
+				bw.write("False");
+				bw.close();
+				fw.close();
+
+			} catch (IOException e) {
+
 				e.printStackTrace();
+
 			}
 			if(serverName.equals("Game"))
 				string = "Game2";
@@ -80,15 +100,20 @@ public class GameServer implements GameInterface{
 		}
 		else
 		{
-			PrintWriter pw = null; 
+			BufferedWriter bw = null;
+			FileWriter fw = null;
+
 			try {
-				pw = new PrintWriter("TurnTracker");
-				pw.print("");
-				pw.print("True");
-				pw.close();
-			} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+				fw = new FileWriter("TurnTracker");
+				bw = new BufferedWriter(fw);
+				bw.write("True");
+				bw.close();
+				fw.close();
+
+			} catch (IOException e) {
+
+				e.printStackTrace();
+
 			}
 		}
 	}
@@ -119,16 +144,22 @@ public class GameServer implements GameInterface{
 			}
 		}
 		else
-		{
-			PrintWriter pw = null;
+		{//Board
+			//str[0][0] + str[0][1] + str[0][2] + str[1][0] + str[1][1] + str[1][2] + str[2][0] + str[2][1] + str[2][2]
+			BufferedWriter bw = null;
+			FileWriter fw = null;
+
 			try {
-				pw = new PrintWriter("Board");
-				pw.print("");
-				pw.print(str[0][0] + str[0][1] + str[0][2] + str[1][0] + str[1][1] + str[1][2] + str[2][0] + str[2][1] + str[2][2]);
-				pw.close();
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
+				fw = new FileWriter("Board");
+				bw = new BufferedWriter(fw);
+				bw.write(str[0][0] + str[0][1] + str[0][2] + str[1][0] + str[1][1] + str[1][2] + str[2][0] + str[2][1] + str[2][2]);
+				bw.close();
+				fw.close();
+
+			} catch (IOException e) {
+
 				e.printStackTrace();
+
 			}
 		}
 	}
@@ -141,7 +172,7 @@ public class GameServer implements GameInterface{
 	 */
 	
 	public String [] [] updateBoard(String serverName, String host, boolean differentiatesServers)throws IOException
-	{
+	{//Board
 		File file = new File("Board");
 		BufferedReader br = new BufferedReader(new FileReader(file));
 		String boardState = br.readLine();
@@ -182,14 +213,23 @@ public class GameServer implements GameInterface{
 		BufferedReader br = new BufferedReader(new FileReader(file));
 		String ClientServerToAttach = br.readLine();
 		br.close();
-		if(ClientServerToAttach.equals("Game"))
-		{
-			PrintWriter pw = new PrintWriter("ClientStartup");
-			pw.print("");
-			pw.print("Game2");
-			pw.close();
-		}
+		//if(ClientServerToAttach.equals("Game"))
+		//{
+		//	PrintWriter pw = new PrintWriter("ClientStartup");
+		//	pw.print("");
+		//	pw.print("Game2");
+		//	pw.close();
+		//}
 		return ClientServerToAttach;
+	}
+	
+	@Override
+	public String readChat() throws IOException {
+		File file = new File("Chat");
+		BufferedReader br = new BufferedReader(new FileReader(file));
+		String str = br.readLine();
+		br.close();
+		return str;
 	}
 	
 	public static void main(String args[])
@@ -218,4 +258,6 @@ public class GameServer implements GameInterface{
 			e.printStackTrace();
 		}
 	}
+
+	
 }
