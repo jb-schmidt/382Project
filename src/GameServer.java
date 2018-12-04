@@ -178,15 +178,6 @@ public class GameServer implements GameInterface{
 			BufferedReader br = new BufferedReader(new FileReader(file));
 			String serverName = br.readLine();
 			br.close();
-			if(serverName.equals("Game"))
-			{
-				PrintWriter pw = new PrintWriter("ServerStartup");
-				pw.print("");
-				pw.print("Game2");
-				pw.close();
-				
-			}
-
 			registry.bind(serverName, stub);
 			System.err.println("Server ready");
 		}
